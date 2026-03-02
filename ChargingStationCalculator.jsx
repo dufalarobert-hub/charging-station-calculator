@@ -21,6 +21,10 @@ const ChargingStationCalculator = () => {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
+  // Modals
+  const [showGdprModal, setShowGdprModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+
   // Flow control
   const [step, setStep] = useState('segment');
   const [segment, setSegment] = useState('');
@@ -505,32 +509,42 @@ const ChargingStationCalculator = () => {
       {page === 'home' && <>
       <section className="bg-white border-b border-slate-200 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6">
-              Zjistěte cenu instalace nabíjecí stanice
-            </h1>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6">
+                Zjistěte cenu instalace nabíjecí stanice
+              </h1>
 
-            <p className="text-xl text-slate-600 mb-4 max-w-3xl leading-relaxed">
-              Orientační odhad nákladů pro rodinné domy, firmy i bytové domy — bez registrace a bez závazků.
-            </p>
+              <p className="text-xl text-slate-600 mb-4 leading-relaxed">
+                Orientační odhad nákladů pro rodinné domy, firmy i bytové domy — bez registrace a bez závazků.
+              </p>
 
-            <p className="text-base text-slate-500 mb-10 max-w-2xl">
-              Ceny vycházejí z průměrných tržních cen pro rok 2026 a zahrnují kompletní instalaci včetně materiálu i práce. Výsledný odhad slouží jako orientační základ pro vaše rozhodování. Finální cena se vždy odvíjí od konkrétních podmínek v místě instalace.
-            </p>
+              <p className="text-base text-slate-500 mb-10">
+                Ceny vycházejí z průměrných tržních cen pro rok 2026 a zahrnují kompletní instalaci včetně materiálu i práce. Výsledný odhad slouží jako orientační základ pro vaše rozhodování. Finální cena se vždy odvíjí od konkrétních podmínek v místě instalace.
+              </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={scrollToCalculator}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl text-base"
-              >
-                Spočítat odhad
-              </button>
-              <button
-                onClick={scrollToCalculator}
-                className="border-2 border-slate-300 text-slate-700 hover:border-blue-600 hover:text-blue-600 font-semibold py-4 px-8 rounded-xl transition-all duration-200 text-base"
-              >
-                Jak kalkulátor funguje?
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={scrollToCalculator}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl text-base"
+                >
+                  Spočítat odhad
+                </button>
+                <button
+                  onClick={scrollToCalculator}
+                  className="border-2 border-slate-300 text-slate-700 hover:border-blue-600 hover:text-blue-600 font-semibold py-4 px-8 rounded-xl transition-all duration-200 text-base"
+                >
+                  Jak kalkulátor funguje?
+                </button>
+              </div>
+            </div>
+
+            <div className="hidden md:block">
+              <img
+                src="/images/hero-buildings.png"
+                alt="Kalkulátor pro rodinné domy, firmy a bytové domy"
+                className="w-full h-auto rounded-2xl shadow-2xl"
+              />
             </div>
           </div>
         </div>
@@ -588,6 +602,15 @@ const ChargingStationCalculator = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Technical Overview Image */}
+          <div className="mt-16 max-w-5xl mx-auto">
+            <img
+              src="/images/technical-overview.png"
+              alt="Technické zobrazení instalace nabíjecích stanic"
+              className="w-full h-auto rounded-2xl shadow-2xl"
+            />
           </div>
         </div>
       </section>
@@ -2042,6 +2065,66 @@ const ChargingStationCalculator = () => {
       </section>
       </>}
 
+      {/* GDPR Modal */}
+      {showGdprModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" onClick={() => setShowGdprModal(false)}>
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 transition-opacity bg-slate-900 bg-opacity-75" />
+
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full" onClick={(e) => e.stopPropagation()}>
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-2xl font-bold text-slate-900">Zásady zpracování osobních údajů</h3>
+                  <button onClick={() => setShowGdprModal(false)} className="text-slate-400 hover:text-slate-600">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="mt-4 max-h-96 overflow-y-auto prose prose-sm max-w-none">
+                  <iframe src="/gdpr.html" className="w-full h-96 border-0" title="Zásady zpracování osobních údajů"></iframe>
+                </div>
+              </div>
+              <div className="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button onClick={() => setShowGdprModal(false)} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg">
+                  Zavřít
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Terms Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" onClick={() => setShowTermsModal(false)}>
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 transition-opacity bg-slate-900 bg-opacity-75" />
+
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full" onClick={(e) => e.stopPropagation()}>
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-2xl font-bold text-slate-900">Podmínky použití kalkulátoru</h3>
+                  <button onClick={() => setShowTermsModal(false)} className="text-slate-400 hover:text-slate-600">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="mt-4 max-h-96 overflow-y-auto prose prose-sm max-w-none">
+                  <iframe src="/terms.html" className="w-full h-96 border-0" title="Podmínky použití"></iframe>
+                </div>
+              </div>
+              <div className="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button onClick={() => setShowTermsModal(false)} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg">
+                  Zavřít
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2068,8 +2151,8 @@ const ChargingStationCalculator = () => {
               <ul className="space-y-2 text-slate-400 text-sm">
                 <li>Jak kalkulátor funguje</li>
                 <li>Metodika výpočtu cen</li>
-                <li>Ochrana osobních údajů</li>
-                <li>Podmínky použití</li>
+                <li><button onClick={() => setShowGdprModal(true)} className="hover:text-white transition-colors">Ochrana osobních údajů</button></li>
+                <li><button onClick={() => setShowTermsModal(true)} className="hover:text-white transition-colors">Podmínky použití</button></li>
               </ul>
             </div>
           </div>
